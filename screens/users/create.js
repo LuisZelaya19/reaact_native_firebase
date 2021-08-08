@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {View, Button, TextInput, ScrollView, StyleSheet} from 'react-native'
+import firebase from '../../database/firebase'
 
 const UsersCreate = () => {
 
@@ -13,6 +14,23 @@ const UsersCreate = () => {
 		setState({...state, [name]:value})
 	}
 
+	const storeUser = async () => {
+		if(state.name == "")
+		{
+			alert('The name field is required')
+		}
+		else{
+			await firebase.db.collection('users').add({
+				name: state.name,
+				email: state.email,
+				phone: state.phone
+			})
+
+			alert('saved')
+
+		}
+	};
+
 	return (
 		<ScrollView style = {styles.container}>
 			<View style= {styles.inputGroup}>
@@ -25,7 +43,7 @@ const UsersCreate = () => {
 				<TextInput placeholder="phone" onChangeText = {(value) => handleChangeValue('phone', value)}/>
 			</View>
 			<View>
-				<Button title = "Save" onPress = {() => console.log(state)} />
+				<Button title = "Save" onPress = {() => storeUser()} />
 			</View>
 		</ScrollView>
 	)
