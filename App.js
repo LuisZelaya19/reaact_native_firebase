@@ -14,8 +14,8 @@ function MyStack()
 {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="UsersCreate" component={UsersCreate}/>
 			<Stack.Screen name="UsersIndex" component={UsersIndex}/>
+			<Stack.Screen name="UsersCreate" component={UsersCreate}/>
 			<Stack.Screen name="UsersEdit" component={UsersEdit}/>
 		</Stack.Navigator>
 	)

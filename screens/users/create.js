@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {View, Button, TextInput, ScrollView, StyleSheet} from 'react-native'
 import firebase from '../../database/firebase'
 
-const UsersCreate = () => {
+const UsersCreate = (props) => {
 
 	const[state, setState] = useState({
 		name: '',
@@ -26,7 +26,7 @@ const UsersCreate = () => {
 				phone: state.phone
 			})
 
-			alert('saved')
+			props.navigation.navigate('UsersIndex')
 
 		}
 	};
