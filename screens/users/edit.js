@@ -4,12 +4,14 @@ import firebase from '../../database/firebase'
 
 const UsersEdit = (props) => {
 
-	const[user, setUser] = useState({
+	const initialState = {
 		id: '',
 		name: '',
 		email: '',
 		phone: ''
-	})
+	}
+
+	const[user, setUser] = useState(initialState)
 
 	const getUserById = async (id) => {
 		const query = firebase.db.collection('users').doc(id)
@@ -20,6 +22,19 @@ const UsersEdit = (props) => {
 			...user,
 			id: doc.id,
 		})
+	}
+
+	const updateUser = async () => {
+		const query = firebase.db.collection('users').doc(user.id)
+		const doc = await query.set({
+			name: user.name,
+			email: user.email,
+			phone: user.phone
+		})
+
+		setUser(initialState)
+
+		props.navigation.navigate('UsersIndex')
 	}
 
 	useEffect(() => {
@@ -43,7 +58,7 @@ const UsersEdit = (props) => {
 				<TextInput value={user.phone} placeholder="phone" onChangeText = {(value) => handleChangeValue('phone', value)}/>
 			</View>
 			<View>
-				<Button title = "Edit" onPress = {() => storeUser()} />
+				<Button title = "Edit" onPress = {() => updateUser()} />
 			</View>
 		</ScrollView>
 	)
