@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {View, Text, ScrollView, Button} from 'react-native'
+import {View, Text, ScrollView, Button, Alert} from 'react-native'
 import firebase from '../../database/firebase'
 import { Avatar, ListItem } from 'react-native-elements'
 
@@ -27,6 +27,19 @@ const UsersIndex = (props) => {
 		})
 	}, [])
 
+	const deleteUser = async (id) => {
+			const query = firebase.db.collection('users').doc(id)
+			await query.delete()
+			props.navigation.navigate('UsersIndex')
+	}
+
+	const deleteConfirmationAlert = (id) => {
+		Alert.alert('Delete user', 'Are you sure?', [
+			{text: 'Yes', onPress: () => deleteUser(id)},
+			{text: 'No', onPress: () => console.log(false)},
+		])	
+	}
+
 	return (
 		<ScrollView>
 			<Button title = "create user" onPress = {() => props.navigation.navigate('UsersCreate')}/>
@@ -35,11 +48,7 @@ const UsersIndex = (props) => {
 					
 					return (
 
-						<ListItem key={user.id} bottomDivider onPress={() => {
-							props.navigation.navigate('UsersEdit', {
-								userId: user.id
-							})
-							}}>
+						<ListItem key={user.id} bottomDivider>
 							<ListItem.Content>
 							<Avatar source={{
 								uri:
@@ -47,6 +56,10 @@ const UsersIndex = (props) => {
 							}} />
 								<ListItem.Title>{user.name}</ListItem.Title>
 								<ListItem.Subtitle>{user.email}</ListItem.Subtitle>
+								<Button color="#17a008" title = "Edit user" onPress = {() => props.navigation.navigate('UsersEdit', {
+									userId: user.id
+								})}/>
+								<Button color="#db182e" title = "Delete user" onPress = {() => deleteConfirmationAlert(user.id)}/>
 							</ListItem.Content>
 						</ListItem>
 					)
